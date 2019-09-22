@@ -48,7 +48,9 @@ public class DatabaseReader {
         try {
             stat = this.db_connection.createStatement();
             // TODO: Write an SQL statement to retrieve a league (conference) and a division
-            String sql = "";
+            String sql = "SELECT conference, division from Team";
+            results = stat.executeQuery(sql);
+            division.add(results);
             // TODO: Add all 6 combinations to the ArrayList divisions
         } catch (SQLException ex) {
             Logger.getLogger(DatabaseReader.class.getName()).log(Level.SEVERE, null, ex);
@@ -71,8 +73,9 @@ public class DatabaseReader {
         try {
             stat = this.db_connection.createStatement();
             // TODO: Write an SQL statement to retrieve a teams from a specific division
-            String sql = "";
+            String sql = "SELECT division from team";
             results = stat.executeQuery(sql);
+            teams.addd(results);
             // TODO: Add all 5 teams to the ArrayList teams
             results.close();
         } catch (SQLException ex) {
@@ -87,6 +90,7 @@ public class DatabaseReader {
      */
     public Team getTeamInfo(String teamName) {
         Team team = null;
+        team = "SELECT roster, address, logo from teams"
         // TODO: Retrieve team info (roster, address, and logo) from the database
         return team;
     }

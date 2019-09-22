@@ -118,6 +118,6 @@ public class Team {
     @Override
     public String toString() {
         // TODO: Implement this method
-        throw new UnsupportedOperationException();
+        return this.name+'\n'+this.conference+" "+"|"+" "+this.division+'\n'+this.address+'\n'+"Roster size: "+this.roster.size();
     }
 }

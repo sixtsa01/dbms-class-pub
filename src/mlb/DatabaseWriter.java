@@ -58,8 +58,11 @@ public class DatabaseWriter {
         try {
             Scanner fs = new Scanner(new File(filename));
             while (fs.hasNextLine()) {
+                String[] address = fs.nextLine().split("    ");
+                Address ts = new Address(address[1], address[2], address[3], address[4], address[5], address[6], address[7], address[8]);
+                addressBook.add(ts);
+                System.out.println(addressBook);
                 // TODO: Parse each line into an object of type Address and add it to the ArrayList
-                fs.nextLine();
             }
         } catch (IOException ex) {
             Logger.getLogger(DatabaseReader.class.getName()).log(Level.SEVERE, null, ex);
@@ -69,11 +72,16 @@ public class DatabaseWriter {
     }
     public ArrayList<Player> readPlayerFromCsv(String filename) {
         ArrayList<Player> roster = new ArrayList<>();
-        CSVReader reader = null;
-        // TODO: Read the CSV file, create an object of type Player from each line and add it to the ArrayList
-        
+        CSVReader fs = new CSVReader(new File(filename));
+        while (fs.hasNextLine()) {
+            String[] reader = fs.nextLine().split("  ");
+            Player ts = new Player(reader[1], reader[2], reader[3], reader[4]);
+            roster.add(ts);
+            System.out.println(roster);
+            }
         return roster;
     }
+        // TODO: Read the CSV file, create an object of type Player from each line and add it to the ArrayList
     /**
      * Create tables cities and teams
      * @param db_filename
@@ -148,11 +156,18 @@ public class DatabaseWriter {
     public void writeTeamTable(String db_filename, ArrayList<Team> league) throws SQLException {
         Connection db_connection = DriverManager.getConnection(SQLITEDBPATH + db_filename);
         // TODO: Write an SQL statement to insert a new team into a table
-        String sql = "";
+        String sql = "SELECT * from Team INSERT INTO Team(db_filename) VALUES(league)";
         for (Team team: league) {
             PreparedStatement statement_prepared = db_connection.prepareStatement(sql);
             // TODO: match parameters of the SQL statement and team id, abbreviation, name, conference, division, and logo
-            statement_prepared.executeUpdate();
+            statement_prepared.executeUpdate("SELECT team from Team"
+                            + "idpk INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                            + "id,"
+                            + "abbr,"
+                            + "name,"
+                            + "conference,"
+                            + "division,"
+                            + "logo BLOB);");
         }
         
         db_connection.close();
@@ -166,10 +181,19 @@ public class DatabaseWriter {
         Connection db_connection = DriverManager.getConnection(SQLITEDBPATH + db_filename);
         for (Address address: addressBook) {
             // TODO: Write an SQL statement to insert a new address into a table
-            String sql = "";
+            String sql = "SELECT * from Address INSERT INTO Address(db_filename) VALUES(addressBook)";
             PreparedStatement statement_prepared = db_connection.prepareStatement(sql);
             // TODO: match parameters of the SQL statement and address site, street, city, state, zip, phone, and url
-            statement_prepared.executeUpdate();
+            statement_prepared.executeUpdate("SELECT address from Address("
+                            + "site,"
+                            + "street,"
+                            + "city,"
+                            + "state,"
+                            + "zip,"
+                            + "phone,"
+                            + "url,"
+                            + "FOREIGN KEY (team) REFERENCES team(name));");
+            
         }
         
         db_connection.close();
@@ -183,10 +207,16 @@ public class DatabaseWriter {
         Connection db_connection = DriverManager.getConnection(SQLITEDBPATH + db_filename);
         for (Player player: roster) {
             // TODO: Write an SQL statement to insert a new player into a table
-            String sql = "";
+            String sql = "SELECT * from Player INSERT INTO Player(db_filename) VALUES(roster)";
             PreparedStatement statement_prepared = db_connection.prepareStatement(sql);
             // TODO: match parameters of the SQL statement and player id, name, position
-            statement_prepared.executeUpdate();
+            statement_prepared.executeUpdate("SELECT player from Player"
+                            + "idpk INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                            + "id,"
+                            + "name,"
+                            + "team,"
+                            + "position,"
+                            + "FOREIGN KEY (team) REFERENCES team(id));");
         }
         
         db_connection.close();
