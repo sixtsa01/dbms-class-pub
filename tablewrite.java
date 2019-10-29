@@ -9,7 +9,6 @@ import java.sql.Statement;
 public class ProjectDatabase {
 	Class.forName("com.mysql.jdbc.Driver");
 	connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/?user=root")
-	statement = connect.createStatement();
 
 	public void SEMESTER() throws SQLException {
 		this.query.executeUpdate("CREATE TABLE IF NOT EXISTS semester ("
