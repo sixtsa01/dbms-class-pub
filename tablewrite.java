@@ -104,3 +104,4 @@ public class ProjectDatabase {
 			+ "FOREIGN KEY(section) REFERENCES section(id));");
 	}
 }
+
